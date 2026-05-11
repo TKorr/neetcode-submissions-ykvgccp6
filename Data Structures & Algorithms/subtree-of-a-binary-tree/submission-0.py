@@ -1,0 +1,23 @@
+class Solution:   
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        
+      if not root and not subRoot:
+          return True
+      if not root and subRoot:
+          return False
+      if root and not subRoot:
+          return True
+
+      if self.isSameTree(root, subRoot):
+        return True
+      else:
+        return self.isSubtree(root.right, subRoot) or self.isSubtree(root.left, subRoot)
+      
+      
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+            if not p and not q:
+                return True
+            if p and q and p.val == q.val:
+                return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+            else:
+                return False
