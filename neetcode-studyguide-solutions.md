@@ -765,7 +765,7 @@ Time and Space Complexity:
 - Time: O(n)
 - Space: O(1)
 
-## Remove Node From End of Linked List
+### Remove Node From End of Linked List
 ```python
 # Definition for singly-linked list.
 # class ListNode:
@@ -794,4 +794,220 @@ Time and Space Complexity:
 - Time: O(n)
 - Space: O(1)
 
+### Copy Linked List with Random Pointer
+```python
+# Definition for singly-linked list with a random pointer.
+# class ListNode:
+#     def __init__(self,
+```
+
+
+## Trees
+
+### Invert Binary Tree
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root: return None
+
+        root.left, root.right = root.right, root.left
+
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+
+        return root
+```
+Time and Space Complexity:
+- Time: O(n)
+- Space: O(n) for the recursive call stack.
+
+### Maximum Depth of Binary Tree
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+```
+Time and Space Complexity:
+- Time: O(n)
+- Space: O(h)
+  - Best case (balanced tree): O(log n)
+  - Worst case (degenerate tree): O(n)
+
+Where n is the number of nodes in the tree and h is the height of the tree.
+
+## Diameter of Binary Tree
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        def dfs(root):
+            nonlocal res
+
+            if not root:
+                return 0
+            left = dfs(root.left)
+            right = dfs(root.right)
+            res = max(res, left + right)
+            
+            # Return the height of the current subtree
+            return 1 + max(left, right)
+
+        dfs(root)
+        return res
+```
+Time and Space Complexity:
+- Time: O(n)
+- Space: O(h)
+  - Best case (balanced tree): O(log n)
+  - Worst case (degenerate tree): O(n)
+
+Where n is the number of nodes in the tree and h is the height of the tree.
+
+## Balanced Binary Tree
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        isBalanced = True
+        
+        def dfs(root):
+            nonlocal isBalanced
+
+            if not root:
+                return True
+            
+            left = dfs(root.left)
+            right = dfs(root.right)
+
+            isBalanced = left and right and abs(left - right) <= 1
+            return 1 + max(left,right)
+
+        dfs(root)
+        return isBalanced
+```
+Time and Space Complexity:
+- Time: O(n)
+- Space: O(h)
+  - Best case (balanced tree): O(log n)
+  - Worst case (degenerate tree): O(n)
+
+
+### Same Tree
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        if not p and not q:
+            return True
+        if p and q and p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        else:
+            return False
+```
+Time and Space Complexity:
+- Time: O(n)
+- Space: O(h)
+  - Best case (balanced tree): O(log n)
+  - Worst case (degenerate tree): O(n)
+
+### Subtree of Another Tree
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        if not subRoot:
+            return True
+        if not root:
+            return False
+
+        if self.sameTree(root, subRoot):
+            return True
+        return (self.isSubtree(root.left, subRoot) or
+               self.isSubtree(root.right, subRoot))
+
+    def sameTree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        if not root and not subRoot:
+            return True
+        if root and subRoot and root.val == subRoot.val:
+            return (self.sameTree(root.left, subRoot.left) and
+                   self.sameTree(root.right, subRoot.right))
+        return False
+```
+Time and Space Complexity:
+- Time: O(n * m)
+- Space: O(m + n)
+
+Where n is the number of nodes in root and m is the number of nodes in the subtree.
+
+### Lowest Common Ancestor in Binary Search Tree
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        if not root or not p or not q:
+            return None
+        if (max(p.val, q.val) < root.val):
+            return self.lowestCommonAncestor(root.left, p, q)
+        elif (min(p.val, q.val) > root.val):
+            return self.lowestCommonAncestor(root.right, p, q)
+        else:
+            return root
+```
+Time and Space Complexity:
+- Time: O(h)
+- Space: O(h)
+
+Where h is the height of the tree.
 
